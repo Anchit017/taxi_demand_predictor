@@ -28,6 +28,7 @@ gpd = "^1.1.1"
 dask = "^2023.4.1"
 watchdog = "^3.0.0"
 gsheetsdb = "^0.1.13.1"
+certifi = "^2022.12.7"
 
 [build-system]
 requires = ["poetry-core"]

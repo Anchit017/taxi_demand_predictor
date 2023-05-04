@@ -187,8 +187,7 @@ else:
 
 #     st.pydeck_chart(r)
 #     progress_bar.progress(4/N_STEPS)
-
-
+# 
 with st.spinner(text="Fetching batch of features used in the last run"):
     features_df = _load_batch_of_features_from_store(current_date)
     st.sidebar.write('✅ Inference features fetched from the store')
@@ -198,7 +197,7 @@ with st.spinner(text="Fetching batch of features used in the last run"):
 with st.spinner(text="Plotting time-series data"):
 
     loc_df = load_data(st.secrets["public_gsheets_url"])
-    st.dataframe(loc_df)
+    # st.dataframe(loc_df)
    
     row_indices = np.argsort(predictions_df['predicted_demand'].values)[::-1]
     n_to_plot = 10

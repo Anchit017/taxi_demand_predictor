@@ -3625,6 +3625,17 @@ pymysql = ["pymysql"]
 sqlcipher = ["sqlcipher3-binary"]
 
 [[package]]
+name = "ssl"
+version = "1.16"
+description = "SSL wrapper for socket objects (2.3, 2.4, 2.5 compatible)"
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "ssl-1.16.tar.gz", hash = "sha256:ac21156fee6aee9eb8d765bbb16f5f49492d81ff4b22f7b8fc001d2251120930"},
+]
+
+[[package]]
 name = "streamlit"
 version = "1.22.0"
 description = "A faster way to build and share data apps"
@@ -4132,4 +4143,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<3.9.7 || >3.9.7,<3.10"
-content-hash = "da0c8eefe6bc48d04ffd8a03f8e11e0960006fd7e34289b125e571b20e712f15"
+content-hash = "b1c64248a9466f21010e527d7908412996661dbddd21df1ffc2986edd66d2df7"
