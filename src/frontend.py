@@ -191,7 +191,7 @@ with st.spinner(text="Fetching batch of features used in the last run"):
 
 
 with st.spinner(text="Plotting time-series data"):
-    loc_df = pd.DataFrame(TRANSFORMED_DATA_DIR / "nyc_locs.csv")   
+    loc_df = pd.read_csv(TRANSFORMED_DATA_DIR / "nyc_locs.csv")   
     row_indices = np.argsort(predictions_df['predicted_demand'].values)[::-1]
     n_to_plot = 10
 
