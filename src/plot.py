@@ -7,68 +7,71 @@ from src.paths import TRANSFORMED_DATA_DIR
 
 def plot_one_sample(
     features: pd.DataFrame,
+    loc_df: pd.DataFrame,
     targets: pd.Series,
     example_id: int,
     predictions: Optional[pd.Series] = None,
 ):
     """"""
-    def downloading_zone_names():
-        import requests
-        URL = f'https://d37ci6vzurychx.cloudfront.net/misc/taxi+_zone_lookup.csv'
-        response = requests.get(URL)
-        if response.status_code == 200:
-            path = TRANSFORMED_DATA_DIR / f"nyc_zones.csv"
-            open(path, "wb").write(response.content)
-            return path
-        else:
-            print("Couldn't retrive the zone names, so using only the location id")
-    try:
-        zones = downloading_zone_names()
-        loc_df = pd.read_csv(zones)
-        loc_df = loc_df[['LocationID','Zone']]
-        import numpy as np
-        loc_df['Zone'].replace(np.nan, "Yorkville West",inplace=True)
-        loc_df['Zone'].replace("NV", "Yorkville West",inplace=True)
-        features_ = pd.merge(features,loc_df,left_on="pickup_location_id",right_on="LocationID",how='inner')
-        features_.drop(columns=['LocationID'],inplace=True)
-    except:
-        print("Couldn't retrive the NYC Zones, so using the location id's")
-        features_ = features_.iloc[example_id]
-        target_ = targets.iloc[example_id]
-        
-        ts_columns = [c for c in features.columns if c.startswith('rides_previous_')]
-        ts_values = [features_[c] for c in ts_columns] + [target_]
-        ts_dates = pd.date_range(
-            features_['pickup_hour'] - timedelta(hours=len(ts_columns)),
-            features_['pickup_hour'],
-            freq='H'
-        )
-        
-        # line plot with past values
-        title = f'Pick up hour={features_["pickup_hour"]}, location_id={features_["pickup_location_id"]}'
-        fig = px.line(
-            x=ts_dates, y=ts_values,
-            template='plotly_dark',
-            markers=True, title=title
-        )
-        
-        # green dot for the value we wanna predict
-        fig.add_scatter(x=ts_dates[-1:], y=[target_],
-                        line_color='green',
-                        mode='markers', marker_size=10, name='actual value') 
-        
-        if predictions is not None:
-            # big red X for the predicted value, if passed
-            prediction_ = predictions.iloc[example_id]
-            fig.add_scatter(x=ts_dates[-1:], y=[prediction_],
-                            line_color='red',
-                            mode='markers', marker_symbol='x', marker_size=15,
-                            name='prediction')             
-        return fig
-
+    # def downloading_zone_names():
+    #     import requests
+    #     URL = f'https://d37ci6vzurychx.cloudfront.net/misc/taxi+_zone_lookup.csv'
+    #     response = requests.get(URL)
+    #     if response.status_code == 200:
+    #         path = TRANSFORMED_DATA_DIR / f"nyc_zones.csv"
+    #         open(path, "wb").write(response.content)
+    #         return path
+    #     else:
+    #         print("Couldn't retrive the zone names, so using only the location id")
+    # try:
+    #     zones = downloading_zone_names()
+    #     loc_df = pd.read_csv(zones)
+    #     loc_df = loc_df[['LocationID','Zone']]
+    #     import numpy as np
+    #     loc_df['Zone'].replace(np.nan, "Yorkville West",inplace=True)
+    #     loc_df['Zone'].replace("NV", "Yorkville West",inplace=True)
+    #     features_ = pd.merge(features,loc_df,left_on="pickup_location_id",right_on="LocationID",how='inner')
+    #     features_.drop(columns=['LocationID'],inplace=True)
+    # except:
+    #     print("Couldn't retrive the NYC Zones, so using the location id's")
+    # features_ = features_.iloc[example_id]
+    # target_ = targets.iloc[example_id]
+    
+    # ts_columns = [c for c in features.columns if c.startswith('rides_previous_')]
+    # ts_values = [features_[c] for c in ts_columns] + [target_]
+    # ts_dates = pd.date_range(
+    #     features_['pickup_hour'] - timedelta(hours=len(ts_columns)),
+    #     features_['pickup_hour'],
+    #     freq='H'
+    # )
+    
+    # # line plot with past values
+    # title = f'Pick up hour={features_["pickup_hour"]}, location_id={features_["pickup_location_id"]}'
+    # fig = px.line(
+    #     x=ts_dates, y=ts_values,
+    #     template='plotly_dark',
+    #     markers=True, title=title
+    # )
+    
+    # # green dot for the value we wanna predict
+    # fig.add_scatter(x=ts_dates[-1:], y=[target_],
+    #                 line_color='green',
+    #                 mode='markers', marker_size=10, name='actual value') 
+    
+    # if predictions is not None:
+    #     # big red X for the predicted value, if passed
+    #     prediction_ = predictions.iloc[example_id]
+    #     fig.add_scatter(x=ts_dates[-1:], y=[prediction_],
+    #                     line_color='red',
+    #                     mode='markers', marker_symbol='x', marker_size=15,
+    #                     name='prediction')             
+    # return fig
+    features_ = pd.merge(features,loc_df,left_on="pickup_location_id",right_on="LocationID",how='inner')
+    features_.drop(columns=['LocationID'],inplace=True)
     features_ = features_.iloc[example_id]
     target_ = targets.iloc[example_id]
-    
+    # features_ = pd.merge(features,loc_df,left_on="pickup_location_id",right_on="LocationID",how='inner')
+
     ts_columns = [c for c in features.columns if c.startswith('rides_previous_')]
     ts_values = [features_[c] for c in ts_columns] + [target_]
     ts_dates = pd.date_range(
