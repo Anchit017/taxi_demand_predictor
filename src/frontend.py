@@ -12,7 +12,7 @@ from src.inference import (
     load_predictions_from_store,
     load_batch_of_features_from_store
 )
-from src.paths import DATA_DIR
+from src.paths import DATA_DIR, TRANSFORMED_DATA_DIR
 from src.plot import plot_one_sample
 
 st.set_page_config(layout="wide")
@@ -95,10 +95,6 @@ def _load_predictions_from_store(
 #     st.sidebar.write('✅ Shape file was downloaded ')
 #     progress_bar.progress(1/N_STEPS)
 
-@st.cache_data
-def load_data(sheet_url):
-    csv_url = sheet_url.replace("/edit#gid=","/export?format=csv&gid=")
-    return pd.read_csv(csv_url)
 
 with st.spinner(text="Fetching model predictions from the store"):
     predictions_df = _load_predictions_from_store(
@@ -195,10 +191,7 @@ with st.spinner(text="Fetching batch of features used in the last run"):
 
 
 with st.spinner(text="Plotting time-series data"):
-
-    loc_df = load_data(st.secrets["public_gsheets_url"])
-    # st.dataframe(loc_df)
-   
+    loc_df = pd.DataFrame(TRANSFORMED_DATA_DIR / "nyc_locs.csv")   
     row_indices = np.argsort(predictions_df['predicted_demand'].values)[::-1]
     n_to_plot = 10
 
