@@ -198,6 +198,7 @@ with st.spinner(text="Fetching batch of features used in the last run"):
 with st.spinner(text="Plotting time-series data"):
 
     loc_df = load_data(st.secrets["public_gsheets_url"])
+    st.dataframe(loc_df)
    
     row_indices = np.argsort(predictions_df['predicted_demand'].values)[::-1]
     n_to_plot = 10
@@ -206,6 +207,7 @@ with st.spinner(text="Plotting time-series data"):
     for row_id in row_indices[:n_to_plot]:
         fig = plot_one_sample(
             features=features_df,
+            loc_df=loc_df,
             targets=predictions_df['predicted_demand'],
             example_id=row_id,
             predictions=pd.Series(predictions_df['predicted_demand'])
