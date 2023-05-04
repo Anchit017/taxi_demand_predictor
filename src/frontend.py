@@ -20,12 +20,12 @@ st.set_page_config(layout="wide")
 # title
 # current_date = datetime.strptime('2023-01-05 12:00:00', '%Y-%m-%d %H:%M:%S')
 current_date = pd.to_datetime(datetime.utcnow()).floor('H')
-st.title(f'Taxi demand prediction 🚕')
+st.title(f'NYC Yellow Taxi Cab Demand Prediction 🚕')
 st.header(f'{current_date} UTC')
 
 progress_bar = st.sidebar.header('⚙️ Working Progress')
 progress_bar = st.sidebar.progress(0)
-N_STEPS = 6
+N_STEPS = 3
 
 
 # def load_shape_data_file() -> gpd.geodataframe.GeoDataFrame:
@@ -187,7 +187,7 @@ else:
 with st.spinner(text="Fetching batch of features used in the last run"):
     features_df = _load_batch_of_features_from_store(current_date)
     st.sidebar.write('✅ Inference features fetched from the store')
-    progress_bar.progress(5/N_STEPS)
+    progress_bar.progress(2/N_STEPS)
 
 
 with st.spinner(text="Plotting time-series data"):
@@ -205,4 +205,4 @@ with st.spinner(text="Plotting time-series data"):
         )
         st.plotly_chart(fig, theme="streamlit", use_container_width=True, width=1000)
 
-    progress_bar.progress(6/N_STEPS)
+    progress_bar.progress(3/N_STEPS)
